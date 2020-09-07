@@ -11,6 +11,7 @@ declare module 'vtex.styleguide' {
   export const Link: ComponentType<any>
   export const Spinner: ComponentType<any>
   export const IconDelete: ComponentType<any>
+  export const NumericStepper: ComponentType<any>
 }
 
 declare module '@vtex/styleguide/lib/*' {
