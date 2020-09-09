@@ -1,8 +1,10 @@
 import React, { FunctionComponent, Fragment, useState } from 'react'
 import { FormattedPrice } from 'vtex.formatted-price'
-import { Button, ButtonPlain, Input, Modal, Tag } from 'vtex.styleguide'
+import { ButtonPlain, InputButton, Modal, Tag } from 'vtex.styleguide'
 
 import { useItemContext } from './ItemContext'
+
+import styles from './styles.css'
 
 const ManualPricing: FunctionComponent = () => {
   const { item } = useItemContext()
@@ -30,61 +32,67 @@ const ManualPricing: FunctionComponent = () => {
     setIsModalOpen(false)
   }
 
+  const handleSubmitForm = (e: any) => {
+    e.preventDefault()
+    handleCloseModal()
+  }
+
   return (
-    <Fragment>
-      <div className="flex flex-column items-center mt3">
-        <div className={`flex-grow-0 tc mb2 c-muted-1`}>
+    <div
+      className={`mt4 ${styles.quantity} ${styles.quantitySelector}`}
+    >
+      <div className="flex flex-column items-center mt3 tc">
+        <div className="mb3 c-muted-1">
           <FormattedPrice value={manualPrice} />
         </div>
 
-        {priceChanged ? (
-          <div>
-            <div className="flex-grow-0 mb3">
+        {priceChanged && (
+          <Fragment>
+            <div className="mb4">
               <Tag size="small" bgColor="#3F3F40" className="fw5">
                 Changed
               </Tag>
             </div>
-            <ButtonPlain size="small" onClick={handleOpenModal}>
-              Price options
-            </ButtonPlain>
-          </div>
-        ) : (
-          <ButtonPlain size="small" onClick={handleOpenModal}>
-            Change price
-          </ButtonPlain>
+          </Fragment>
         )}
+
+        <ButtonPlain size="small" onClick={handleOpenModal}>
+          {priceChanged ? 'Price options' : 'Change price'}
+        </ButtonPlain>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} className="w-5">
-        <div className="flex flex-column">
-          <span className="t-small mw9 mb1">Original price</span>
-          <div className={`c-muted-1 mb3 ${priceChanged ? 'strike' : ''}`}>
-            <FormattedPrice value={sellingPrice} />
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <form className="c-on-base" onSubmit={e => { handleSubmitForm(e) }}>
+          <div>
+            <div className="t-small mb3">Original price</div>
+            <div className={`c-muted-1 mb3 ${priceChanged ? 'strike' : ''}`}>
+              <FormattedPrice value={sellingPrice} />
+            </div>
           </div>
 
-          <span className="t-small mw9 mb2">Change to</span>
-          <div className="flex flex-row mb3">
-            <div className="mr1">
-              <Input
-                type="number"
-                value={manualPrice}
-                onChange={handleManualPriceChange}
-              />
-            </div>
-
-            <Button onClick={handleCloseModal}>ok</Button>
+          <div className="pt3">
+            <InputButton
+              autoFocus="autofocus"
+              button="OK"
+              buttonProps={{
+                variation: "primary"
+              }}
+              label="Change to"
+              onChange={handleManualPriceChange}
+              value={manualPrice}
+            />
           </div>
 
           {priceChanged && (
-            <div>
-              <ButtonPlain onClick={() => setManualPrice(sellingPrice)}>
+            <div className="mt5">
+              <ButtonPlain size="small" onClick={() => setManualPrice(sellingPrice)}>
                 Revert to original
               </ButtonPlain>
             </div>
           )}
-        </div>
+        </form>
       </Modal>
-    </Fragment>
+    </div>
   )
 }
 

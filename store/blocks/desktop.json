@@ -74,6 +74,13 @@
       "preventHorizontalStretch": "true"
     }
   },
+  "flex-layout.col#manual-pricing": {
+    "children": ["manual-pricing"],
+    "props": {
+      "preventHorizontalStretch": "true",
+      "marginLeft": "8"
+    }
+  },
   "flex-layout.row#unit-price.desktop": {
     "children": ["unit-price#desktop"],
     "props": {
@@ -116,12 +123,6 @@
   "message#desktop": {
     "props": {
       "layout": "cols"
-    }
-  },
-  "flex-layout.col#manual-pricing": {
-    "children": ["manual-pricing"],
-    "props": {
-      "marginLeft": "6"
     }
   }
 }
